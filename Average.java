@@ -14,7 +14,8 @@ public class Average {
     public static void main (String[] args) {
         double _suma = 0.0;
         int _contador = 0;
-	    StdOut.printf(" ++++ Excersise One ++++\n");
+        //StdOut.printf(" ++++ Excersise One ++++\n");
+        System.out.printf(" ++++ Excersise One ++++\n");
         while(!StdIn.isEmpty()) { // ctrl-z para salir del lazo
             _suma += StdIn.readDouble();
             _contador++;

@@ -18,7 +18,7 @@ public class Percolation {
     private final int virtualTopSite;
     private final int virtualBottomSite;
     private final boolean [][] gridState;
-    private int countOpenSites;
+    private int countOpenSites; 
 
     private int rowCurrent;
     private int colCurrent;

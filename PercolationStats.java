@@ -16,6 +16,7 @@ public class PercolationStats {
     private static final double CONFIDENCE_LEVEL = 1.96;
     private final int t;
     private final double [] threshold;
+    private final int _data;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {

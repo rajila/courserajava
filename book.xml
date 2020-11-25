@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><root ID="100">
+	<book msn="Book one" publicacion="2020">Hi
+		<autor>Adam Freeman99999999999999999999999999999999</autor>
+		<titulo>Essential Docker for ASP.NET</titulo>
+	</book>
+	<book msn="Book one" publicacion="2020"/>
+	<book publicacion="2019">
+		<autor>Michael Witting</autor>
+		<titulo>Amazon Web Services</titulo>
+	</book>
+	<book id="1" msn="Book two" publicacion="2010">
+		<autor>Espol</autor>
+		<titulo>Matematicas</titulo>
+	</book>
+<book id="2" msn="Book two" publicacion="2010"><autor>Espol</autor><titulo>Matematicas</titulo></book>
+<book id="3" msn="Book two" publicacion="2010"><autor>Espol</autor><titulo>Matematicas</titulo></book>
+<book id="5" msn="Book two" publicacion="2010"><autor>Espol99999999999999999</autor><titulo>Matematicas</titulo></book>
+<book id="7" msn="Book two" publicacion="2010"><autor>Espol</autor><titulo>Matematicas</titulo></book>
+<book id="8" msn="Book two" publicacion="2010"><autor>Espol</autor><titulo>Matematicas</titulo></book></root>

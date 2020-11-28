@@ -2,11 +2,11 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class FastCollinearPoints {
-    private final Point [] pointsData;
+    private Point [] pointsData;
     private final int numberElements;
     private Double [] skipeSlope;
     private Point [] skipePoint;
-    private LineSegment [] segmentsOk;
+    private final ArrayList<LineSegment> segments;
     private int dimSegment;
 
     // finds all line segments containing 4 or more points
@@ -17,29 +17,25 @@ public class FastCollinearPoints {
         if (!fullPoints(points)) throw new IllegalArgumentException("Input Illegal");
         skipeSlope = new Double[1];
         skipePoint = new Point[1];
-        segmentsOk = new LineSegment[1];
+        segments = new ArrayList<>();
         dimSegment = 0;
-        findAllSegment(this.pointsData);
+        if (!findAllSegment(this.pointsData)) throw new IllegalArgumentException("Input Illegal");
     }
 
     private boolean fullPoints(Point[] points) {
-        for (int i = 0; i < this.numberElements; i++) {
-            if (points[i] == null) return false;
-            for (int j = i + 1; j < this.numberElements; j++) {
-                if (points[j] == null || points[i].compareTo(points[j]) == 0) return false;
-            }
-            this.pointsData[i] = points[i];
-        }
+        this.pointsData = points.clone();
+        for (int i = 0; i < this.numberElements; i++) if (points[i] == null) return false;
         return true;
     }
 
-    private void findAllSegment(Point[] points) {
+    private boolean findAllSegment(Point[] points) {
         Point pointSort;
-        Arrays.sort(points);
         Point [] auxPoint;
+        Arrays.sort(points); // Ordena los puntos
         int indexAux;
-        for (int i = 0; i < this.numberElements; i++) {
-            if (this.numberElements-i <= 3) break;
+        for (int i = 0; i < this.numberElements-1; i++) { // Hasta N-1 puntos
+            if (points[i].compareTo(points[i+1]) == 0) return false; // Valida que ningun punto este repetido
+            if (this.numberElements-i <= 3) continue; // No seguir buscando adyacentes
             auxPoint = new Point[this.numberElements-i];
             indexAux = i;
             for (int m = 0; m < this.numberElements - i; m++) auxPoint[m] = points[indexAux++];
@@ -47,28 +43,28 @@ public class FastCollinearPoints {
             Arrays.sort(auxPoint, pointSort.slopeOrder());
             int count = 1, j = 2;
             double slopeCurrent = pointSort.slopeTo(auxPoint[1]);
+            double slopeNext = 0.0;
             for (; j < this.numberElements - i; j++) {
-                if (slopeCurrent == pointSort.slopeTo(auxPoint[j])) count++;
+                slopeNext = pointSort.slopeTo(auxPoint[j]);
+                if (slopeCurrent == slopeNext) count++;
                 else {
-                    slopeCurrent = pointSort.slopeTo(auxPoint[j]);
-                    if (count > 2) addSegment(pointSort, auxPoint[j-1]);
+                    if (count > 2) addSegment(pointSort, auxPoint[j-1], slopeCurrent);
+                    slopeCurrent = slopeNext;
                     count = 1;
                 }
             }
-            if (count > 2) addSegment(pointSort, auxPoint[j-1]);
+            if (count > 2) addSegment(pointSort, auxPoint[j-1], slopeCurrent);
             if (count == auxPoint.length - 1) break;
         }
+        return true;
     }
 
-    private void addSegment(Point pointStart, Point pointEnd) {
-        double slopeAux = pointStart.slopeTo(pointEnd);
+    private void addSegment(Point pointStart, Point pointEnd, double slopeSegment) {
         for (int i = 0; i < dimSegment; i++)
-            if (slopeAux == skipeSlope[i] && pointEnd.compareTo(skipePoint[i]) == 0) return;
-        if (dimSegment == segmentsOk.length) resizeSegment(dimSegment + 1);
-        segmentsOk[dimSegment++] = new LineSegment(pointStart, pointEnd);
-        dimSegment--;
+            if (slopeSegment == skipeSlope[i] && pointEnd.compareTo(skipePoint[i]) == 0) return;
+        segments.add(new LineSegment(pointStart, pointEnd));
         if (dimSegment == skipeSlope.length) resizeSkipeSlope(dimSegment + 1);
-        skipeSlope[dimSegment++] = slopeAux;
+        skipeSlope[dimSegment++] = slopeSegment;
         dimSegment--;
         if (dimSegment == skipePoint.length) resizeSkipePoint(dimSegment + 1);
         skipePoint[dimSegment++] = pointEnd;
@@ -88,23 +84,13 @@ public class FastCollinearPoints {
         skipePoint = copy;
     }
 
-    private void resizeSegment(int capacity)
-    {
-        LineSegment[] copy = new LineSegment[capacity];
-        for (int i = 0; i < dimSegment; i++) copy[i] = segmentsOk[i];
-        segmentsOk = copy;
-    }
-
     // the number of line segments
     public int numberOfSegments() {
-        return dimSegment;
+        return segments.size();
     }
 
     // the line segments
     public LineSegment[] segments() {
-        LineSegment[] copy = new LineSegment[dimSegment];
-        if (dimSegment == 0) return copy;
-        for (int i = 0; i < dimSegment; i++) copy[i] = segmentsOk[i];
-        return copy;
+        return segments.toArray(new LineSegment[segments.size()]);
     }
 }

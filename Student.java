@@ -52,18 +52,25 @@ public class Student implements Comparable<Student> {
         _students[4] = new Student(5, "Mary", 12);
         System.out.println("Listado Original");
         Student.printList(_students);
-        System.out.println("Listado ordenado ASC por SECTION");
-        Arrays.sort(_students, Student._sortBySelection);
+        // System.out.println("Listado ordenado ASC por SECTION");
+        // Arrays.sort(_students, Student._sortBySelection);
+        // Student.printList(_students);
+        // System.out.println("Listado ordenaso ASC por NAME");
+        // Arrays.sort(_students, Student._sortByName);
+        // Student.printList(_students);
+        // System.out.println("Listado ordenaso ASC por ID");
+        // Arrays.sort(_students); // Ordena por el ID
+        // Student.printList(_students);
+        // System.out.println("Listado ordenaso DESC por ID");
+        // Student._typeOrder = "DESC";
+        // Arrays.sort(_students); // Ordena por el ID
+        // Student.printList(_students);
+        // Arrays.sort(_students, 0, 5, Student._sortBySelection);
+        // System.out.println();
+        // Student.printList(_students);
+        Arrays.sort(_students, 2, 5, Student._sortBySelection);
+        System.out.println();
         Student.printList(_students);
-        System.out.println("Listado ordenaso ASC por NAME");
-        Arrays.sort(_students, Student._sortByName);
-        Student.printList(_students);
-        System.out.println("Listado ordenaso ASC por ID");
-        Arrays.sort(_students); // Ordena por el ID
-        Student.printList(_students);
-        System.out.println("Listado ordenaso DESC por ID");
-        Student._typeOrder = "DESC";
-        Arrays.sort(_students); // Ordena por el ID
-        Student.printList(_students);
+
     }
 }

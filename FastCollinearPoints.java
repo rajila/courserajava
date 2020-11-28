@@ -30,38 +30,34 @@ public class FastCollinearPoints {
 
     private boolean findAllSegment(Point[] points) {
         Point pointSort;
-        Point [] auxPoint;
-        Arrays.sort(points); // Ordena los puntos
-        int indexAux;
         for (int i = 0; i < this.numberElements-1; i++) { // Hasta N-1 puntos
+            Arrays.sort(points, i, this.numberElements);
             if (points[i].compareTo(points[i+1]) == 0) return false; // Valida que ningun punto este repetido
             if (this.numberElements-i <= 3) continue; // No seguir buscando adyacentes
-            auxPoint = new Point[this.numberElements-i];
-            indexAux = i;
-            for (int m = 0; m < this.numberElements - i; m++) auxPoint[m] = points[indexAux++];
-            pointSort = auxPoint[0];
-            Arrays.sort(auxPoint, pointSort.slopeOrder());
-            int count = 1, j = 2;
-            double slopeCurrent = pointSort.slopeTo(auxPoint[1]);
+            pointSort = points[i];
+            Arrays.sort(points, i, this.numberElements, pointSort.slopeOrder());
+            int count = 1, j;
+            double slopeCurrent = pointSort.slopeTo(points[i+1]);
             double slopeNext = 0.0;
-            for (; j < this.numberElements - i; j++) {
-                slopeNext = pointSort.slopeTo(auxPoint[j]);
+            for (j = i + 2; j < this.numberElements; j++) {
+                slopeNext = pointSort.slopeTo(points[j]);
                 if (slopeCurrent == slopeNext) count++;
                 else {
-                    if (count > 2) addSegment(pointSort, auxPoint[j-1], slopeCurrent);
+                    if (count > 2) addSegment(pointSort, points[j-1], slopeCurrent);
                     slopeCurrent = slopeNext;
                     count = 1;
                 }
             }
-            if (count > 2) addSegment(pointSort, auxPoint[j-1], slopeCurrent);
-            if (count == auxPoint.length - 1) break;
+            if (count > 2) addSegment(pointSort, points[j-1], slopeCurrent);
+            if (count == this.numberElements - i - 1) break;
         }
         return true;
     }
 
     private void addSegment(Point pointStart, Point pointEnd, double slopeSegment) {
-        for (int i = 0; i < dimSegment; i++)
+        for (int i = 0; i < dimSegment; i++) {
             if (slopeSegment == skipeSlope[i] && pointEnd.compareTo(skipePoint[i]) == 0) return;
+        }
         segments.add(new LineSegment(pointStart, pointEnd));
         if (dimSegment == skipeSlope.length) resizeSkipeSlope(dimSegment + 1);
         skipeSlope[dimSegment++] = slopeSegment;

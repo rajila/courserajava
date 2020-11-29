@@ -174,6 +174,12 @@ public class Point implements Comparable<Point> {
         //     // segment.draw();
         // }
 
+        // Point [] po = new Point[5];
+        // po[0] = new Point(15718, 268);
+        // po[1] = new Point(24236, 24035);
+        // po[2] = new Point(2507, 4432);
+        // po[3] = new Point(11978, 17573);
+        // po[4] = new Point(24236, 24035);
         FastCollinearPoints fcollinear = new FastCollinearPoints(points);
         StdOut.println(fcollinear.numberOfSegments());
         for (LineSegment segment : fcollinear.segments()) {
@@ -182,5 +188,6 @@ public class Point implements Comparable<Point> {
         }
 
         StdDraw.show();
+        // StdOut.println(Double.NEGATIVE_INFINITY);
     }
 }

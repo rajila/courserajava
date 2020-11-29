@@ -29,9 +29,11 @@ public class FastCollinearPoints {
     }
 
     private boolean findAllSegment(Point[] points) {
+        Point [] aux = points.clone();
+        Arrays.sort(aux, 0, this.numberElements);
         Point pointSort;
         for (int i = 0; i < this.numberElements-1; i++) { // Hasta N-1 puntos
-            Arrays.sort(points, i, this.numberElements);
+            points = aux.clone();
             if (points[i].compareTo(points[i+1]) == 0) return false; // Valida que ningun punto este repetido
             if (this.numberElements-i <= 3) continue; // No seguir buscando adyacentes
             pointSort = points[i];

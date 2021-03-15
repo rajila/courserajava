@@ -1,85 +1,65 @@
+/**
+    Compilar (W10):
+        javac -cp "algs4.jar" Point.java LineSegment.java FastCollinearPoints.java
+    Ejecutar (W10):
+        java -cp ".;algs4.jar" Point <name_file>
+
+    Link of reference:
+    https://algs4.cs.princeton.edu/code/
+*/
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
+/**
+ *
+ * @author RONALD
+ */
 public class FastCollinearPoints {
     private Point [] pointsData;
-    private final int numberElements;
-    private Double [] skipeSlope;
-    private Point [] skipePoint;
     private final ArrayList<LineSegment> segments;
-    private int dimSegment;
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
         if (points == null || points.length == 0) throw new IllegalArgumentException("Input Illegal");
-        this.numberElements = points.length;
-        this.pointsData = new Point[this.numberElements];
+        this.pointsData = new Point[points.length];
         if (!fullPoints(points)) throw new IllegalArgumentException("Input Illegal");
-        skipeSlope = new Double[1];
-        skipePoint = new Point[1];
         segments = new ArrayList<>();
-        dimSegment = 0;
-        if (!findAllSegment(this.pointsData)) throw new IllegalArgumentException("Input Illegal");
+        findAllSegment(this.pointsData);
     }
 
     private boolean fullPoints(Point[] points) {
         this.pointsData = points.clone();
-        for (int i = 0; i < this.numberElements; i++) if (points[i] == null) return false;
+        for (int i = 0; i < this.pointsData.length; i++) if (points[i] == null) return false;
+        Arrays.sort(this.pointsData); // Sorter by coordena for validation de pointers repetidos
+        for (int i = 0; i < this.pointsData.length-1; i++) if (this.pointsData[i].compareTo(this.pointsData[i+1]) == 0) return false;
         return true;
     }
 
-    private boolean findAllSegment(Point[] points) {
-        Point [] aux = points.clone();
-        Arrays.sort(aux, 0, this.numberElements);
-        Point pointSort;
-        for (int i = 0; i < this.numberElements-1; i++) { // Hasta N-1 puntos
-            points = aux.clone();
-            if (points[i].compareTo(points[i+1]) == 0) return false; // Valida que ningun punto este repetido
-            if (this.numberElements-i <= 3) continue; // No seguir buscando adyacentes
-            pointSort = points[i];
-            Arrays.sort(points, i, this.numberElements, pointSort.slopeOrder());
+    private void findAllSegment(Point[] points) {
+        Point pointBase;
+        Point pointFirst;
+        for (int i = 0; i < points.length - 3; i++) { // Hasta N-1 puntos
+            Arrays.sort(points);
+            pointBase = points[i];
+            Arrays.sort(points, pointBase.slopeOrder());
             int count = 1, j;
-            double slopeCurrent = pointSort.slopeTo(points[i+1]);
+            pointFirst = points[1];
+            double slopeCurrent = pointBase.slopeTo(pointFirst);
             double slopeNext = 0.0;
-            for (j = i + 2; j < this.numberElements; j++) {
-                slopeNext = pointSort.slopeTo(points[j]);
+            for (j = 2; j < points.length; j++) {
+                slopeNext = pointBase.slopeTo(points[j]);
                 if (slopeCurrent == slopeNext) count++;
                 else {
-                    if (count > 2) addSegment(pointSort, points[j-1], slopeCurrent);
+                    if (count > 2 && pointBase.compareTo(pointFirst) < 0) segments.add(new LineSegment(pointBase, points[j-1]));
                     slopeCurrent = slopeNext;
+                    pointFirst = points[j];
                     count = 1;
                 }
             }
-            if (count > 2) addSegment(pointSort, points[j-1], slopeCurrent);
-            if (count == this.numberElements - i - 1) break;
+            if (count > 2 && pointBase.compareTo(pointFirst) < 0) segments.add(new LineSegment(pointBase, points[j-1]));
+            if (count == points.length - 1) break;
         }
-        return true;
-    }
-
-    private void addSegment(Point pointStart, Point pointEnd, double slopeSegment) {
-        for (int i = 0; i < dimSegment; i++) {
-            if (slopeSegment == skipeSlope[i] && pointEnd.compareTo(skipePoint[i]) == 0) return;
-        }
-        segments.add(new LineSegment(pointStart, pointEnd));
-        if (dimSegment == skipeSlope.length) resizeSkipeSlope(dimSegment + 1);
-        skipeSlope[dimSegment++] = slopeSegment;
-        dimSegment--;
-        if (dimSegment == skipePoint.length) resizeSkipePoint(dimSegment + 1);
-        skipePoint[dimSegment++] = pointEnd;
-    }
-
-    private void resizeSkipeSlope(int capacity)
-    {
-        Double[] copy = new Double[capacity];
-        for (int i = 0; i < dimSegment; i++) copy[i] = skipeSlope[i];
-        skipeSlope = copy;
-    }
-
-    private void resizeSkipePoint(int capacity)
-    {
-        Point[] copy = new Point[capacity];
-        for (int i = 0; i < dimSegment; i++) copy[i] = skipePoint[i];
-        skipePoint = copy;
     }
 
     // the number of line segments

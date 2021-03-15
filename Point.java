@@ -11,8 +11,6 @@
 import java.util.Comparator;
 
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.In;
 
 public class Point implements Comparable<Point> {
     private final int x;     // x-coordinate of this point
@@ -122,72 +120,5 @@ public class Point implements Comparable<Point> {
     public String toString() {
         /* DO NOT MODIFY */
         return "(" + x + ", " + y + ")";
-    }
-
-    /**
-     * Unit tests the Point data type.
-     */
-    public static void main(String[] args) {
-        /* YOUR CODE HERE */
-        // Point [] points = new Point[5];
-        // points[0] = new Point(3, 6);
-        // points[1] = new Point(1, 10);
-        // points[2] = new Point(6, 2);
-        // points[3] = new Point(2, 8);
-        // points[4] = new Point(10, 5);
-        // // for(Point element : points) StdOut.println(element);
-        // // Arrays.sort(points);
-        // // StdOut.println("\n");
-        // // for(Point element : points) StdOut.println(element);
-        // // Arrays.sort(points, points[0].slopeOrder());
-        // // StdOut.println("\n");
-        // // for(Point element : points) StdOut.println(element);
-        // LineSegment lineSegmento = new LineSegment(points[0], points[1]);
-        // points[0].draw();
-        // points[1].draw();
-        // lineSegmento.draw();
-        In in = new In(args[0]);      // input file
-        int n = in.readInt();        // n-by-n percolation system
-        Point [] points = new Point[n];
-        // StdOut.println(n);
-        for (int i = 0; i < n; i++) {
-            int x = in.readInt();
-            int y = in.readInt();
-            points[i] = new Point(x, y);
-        }
-        // points[n] = null;
-        // repeatedly read in sites to open and draw resulting system
-        // draw the points
-        // draw the points
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
-        for (Point p : points) p.draw();
-        StdDraw.show();
-
-        // print and draw the line segments
-        // BruteCollinearPoints bcollinear = new BruteCollinearPoints(points);
-        // System.out.println("\n");
-        // StdOut.println(bcollinear.numberOfSegments());
-        // for (LineSegment segment : bcollinear.segments()) {
-        //     StdOut.println(segment);
-        //     // segment.draw();
-        // }
-
-        // Point [] po = new Point[5];
-        // po[0] = new Point(15718, 268);
-        // po[1] = new Point(24236, 24035);
-        // po[2] = new Point(2507, 4432);
-        // po[3] = new Point(11978, 17573);
-        // po[4] = new Point(24236, 24035);
-        FastCollinearPoints fcollinear = new FastCollinearPoints(points);
-        StdOut.println(fcollinear.numberOfSegments());
-        for (LineSegment segment : fcollinear.segments()) {
-            StdOut.println(segment);
-            segment.draw();
-        }
-
-        StdDraw.show();
-        // StdOut.println(Double.NEGATIVE_INFINITY);
     }
 }

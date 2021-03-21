@@ -39,7 +39,7 @@ public class FastCollinearPoints {
     private void findAllSegment(Point[] points) {
         Point pointBase;
         Point pointFirst;
-        for (int i = 0; i < points.length - 3; i++) { // Hasta N-1 puntos
+        for (int i = 0; i < points.length - 3; i++) { // Hasta N-3 puntos, because is necesary 3 Points for linesegment
             Arrays.sort(points);
             pointBase = points[i];
             Arrays.sort(points, pointBase.slopeOrder());
